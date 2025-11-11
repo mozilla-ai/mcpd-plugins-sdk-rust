@@ -17,7 +17,7 @@ Thank you for your interest in contributing to the Rust SDK for mcpd plugins!
 
 ### Prerequisites
 
-- Rust 1.75 or later
+- Rust 1.83 or later
 - `cargo` and `rustup`
 
 ### Install Development Tools
