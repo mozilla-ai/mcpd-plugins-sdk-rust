@@ -69,7 +69,7 @@
 //!         req.headers.insert("X-My-Plugin".to_string(), "processed".to_string());
 //!
 //!         Ok(Response::new(HttpResponse {
-//!             continue_: true,
+//!             r#continue: true,
 //!             modified_request: Some(req),
 //!             ..Default::default()
 //!         }))
@@ -128,7 +128,7 @@
 //!             if auth.starts_with("Bearer ") {
 //!                 // Valid token, continue processing.
 //!                 return Ok(Response::new(HttpResponse {
-//!                     continue_: true,
+//!                     r#continue: true,
 //!                     ..Default::default()
 //!                 }));
 //!             }
@@ -136,7 +136,7 @@
 //!
 //!         // No valid token, return 401.
 //!         Ok(Response::new(HttpResponse {
-//!             continue_: false,
+//!             r#continue: false,
 //!             status_code: 401,
 //!             body: b"Unauthorized".to_vec(),
 //!             ..Default::default()
