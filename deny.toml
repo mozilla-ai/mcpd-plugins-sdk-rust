@@ -1,0 +1,35 @@
+# cargo-deny configuration
+# https://embarkstudios.github.io/cargo-deny/
+
+[advisories]
+# Check all dependencies for security vulnerabilities.
+ignore = []
+
+[licenses]
+# This SDK is licensed under Apache-2.0.
+# Only allow permissive licenses that are compatible with Apache-2.0.
+# All licenses below are permissive (non-copyleft) and can be combined with Apache-2.0.
+allow = [
+    "Apache-2.0",              # Same license as this SDK.
+    "MIT",                     # Compatible: Permissive, allows relicensing.
+    "BSD-2-Clause",            # Compatible: Permissive BSD variant.
+    "BSD-3-Clause",            # Compatible: Permissive BSD variant.
+    "ISC",                     # Compatible: Functionally equivalent to MIT.
+    "0BSD",                    # Compatible: Public domain equivalent, most permissive BSD.
+    "Unicode-3.0",             # Compatible: Permissive, used by ICU internationalization crates.
+    "CDLA-Permissive-2.0",     # Compatible: Community Data License, permissive for data/root certificates.
+]
+# Confidence threshold for license detection.
+confidence-threshold = 0.8
+
+[bans]
+# Warn about multiple versions of the same crate.
+multiple-versions = "warn"
+
+[sources]
+# Deny crates from unknown registries.
+unknown-registry = "deny"
+# Deny crates from git repositories (prefer crates.io).
+unknown-git = "deny"
+# Allow crates from crates.io.
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

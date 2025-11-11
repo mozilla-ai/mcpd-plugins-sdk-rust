@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  examples:
+    name: Build Examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: dtolnay/rust-toolchain@stable # Action's stable branch. No SHA pinning - repo doesn't publish releases.
+      - name: Install protoc
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      - name: Build all examples
+        run: cargo build --examples --release
+      - name: List built examples
+        run: ls -lh target/release/examples/
+
+  static-binary:
+    name: Build Static Binary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: dtolnay/rust-toolchain@stable # Action's stable branch. No SHA pinning - repo doesn't publish releases.
+        with:
+          targets: x86_64-unknown-linux-musl
+      - name: Install protoc
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      - name: Build static binary
+        run: cargo build --release --target x86_64-unknown-linux-musl
+      - name: Verify static library
+        run: |
+          file target/x86_64-unknown-linux-musl/release/libmcpd_plugins_sdk.rlib
+          echo "Static library built successfully"
