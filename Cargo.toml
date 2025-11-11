@@ -1,0 +1,61 @@
+[package]
+name = "mcpd-plugins-sdk"
+version = "0.0.2"
+edition = "2021"
+rust-version = "1.75"
+authors = ["Mozilla AI"]
+license = "Apache-2.0"
+description = "Rust SDK for building mcpd plugins"
+repository = "https://github.com/mozilla-ai/mcpd-plugins-sdk-rust"
+keywords = ["mcpd", "plugins", "grpc", "middleware"]
+categories = ["web-programming", "api-bindings"]
+
+[dependencies]
+# gRPC and async runtime.
+tonic = "0.12"
+tokio = { version = "1.35", features = ["full"] }
+tokio-stream = "0.1"
+
+# Protocol buffers.
+prost = "0.13"
+prost-types = "0.13"
+
+# Error handling.
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Serialization.
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging.
+tracing = "0.1"
+
+# CLI argument parsing.
+clap = { version = "4.5", features = ["derive"] }
+
+# HTTP types.
+http = "1.0"
+
+[build-dependencies]
+tonic-build = "0.12"
+ureq = "2.10"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tracing-subscriber = "0.3"
+
+[features]
+default = []
+
+[[example]]
+name = "simple_plugin"
+path = "examples/simple_plugin/main.rs"
+
+[[example]]
+name = "auth_plugin"
+path = "examples/auth_plugin/main.rs"
+
+[[example]]
+name = "rate_limit_plugin"
+path = "examples/rate_limit_plugin/main.rs"

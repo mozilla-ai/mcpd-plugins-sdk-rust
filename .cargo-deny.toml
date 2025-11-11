@@ -1,0 +1,51 @@
+# cargo-deny configuration
+# https://embarkstudios.github.io/cargo-deny/
+
+[advisories]
+# Deny crates with security vulnerabilities.
+vulnerability = "deny"
+# Warn about unmaintained crates.
+unmaintained = "warn"
+# Warn about yanked crates.
+yanked = "warn"
+# Ignore advisories for crates that are not used in production.
+ignore = []
+
+[licenses]
+# Allow Apache-2.0 and MIT licenses.
+allow = [
+    "Apache-2.0",
+    "MIT",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-DFS-2016",
+]
+# Deny AGPLv3 and GPLv3 (copyleft licenses).
+deny = [
+    "AGPL-3.0",
+    "GPL-3.0",
+]
+# Confidence threshold for license detection.
+confidence-threshold = 0.8
+# Use exceptions for specific crates if needed.
+exceptions = []
+
+[bans]
+# Warn about multiple versions of the same crate.
+multiple-versions = "warn"
+# Deny specific crates.
+deny = []
+# Skip certain crates from multiple version detection.
+skip = []
+# Skip tree for certain crates.
+skip-tree = []
+
+[sources]
+# Deny crates from unknown registries.
+unknown-registry = "deny"
+# Deny crates from git repositories (prefer crates.io).
+unknown-git = "deny"
+# Allow crates from crates.io.
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+# Allow specific git sources if needed.
+allow-git = []
