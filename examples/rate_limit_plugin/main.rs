@@ -11,7 +11,6 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::sync::Mutex;
 use tonic::{Request, Response, Status};
-use tracing_subscriber;
 
 #[derive(Debug, Clone)]
 struct TokenBucket {

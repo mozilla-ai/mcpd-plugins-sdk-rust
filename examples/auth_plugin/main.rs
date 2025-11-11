@@ -10,7 +10,6 @@ use std::collections::HashSet;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tonic::{Request, Response, Status};
-use tracing_subscriber;
 
 struct AuthPlugin {
     valid_tokens: Arc<RwLock<HashSet<String>>>,

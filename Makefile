@@ -47,7 +47,7 @@ examples:
 
 .PHONY: lint
 lint:
-	cargo clippy -- -D warnings
+	cargo clippy --all-targets --all-features -- -D warnings
 
 .PHONY: fmt
 fmt:

@@ -7,7 +7,6 @@ use mcpd_plugins_sdk::{
     serve, Capabilities, HttpRequest, HttpResponse, Metadata, Plugin, FLOW_REQUEST,
 };
 use tonic::{Request, Response, Status};
-use tracing_subscriber;
 
 struct SimplePlugin;
 
