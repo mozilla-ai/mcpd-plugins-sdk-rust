@@ -7,10 +7,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("cargo:rerun-if-changed=proto/plugin.proto");
     println!("cargo:rerun-if-env-changed=PROTO_VERSION");
+    println!("cargo:rerun-if-env-changed=FORCE_CODEGEN");
+
+    let proto_path = PathBuf::from("proto/plugin.proto");
+    let generated_file = PathBuf::from("src/generated/mozilla.mcpd.plugins.v1.rs");
+
+    // Check if we need to regenerate code.
+    // Skip generation if both proto and generated files exist, unless FORCE_CODEGEN is set.
+    let force_codegen = env::var("FORCE_CODEGEN").is_ok();
+    let needs_generation = force_codegen || !proto_path.exists() || !generated_file.exists();
+
+    if !needs_generation {
+        eprintln!("Using existing generated code (set FORCE_CODEGEN=1 to regenerate)");
+        return Ok(());
+    }
 
     // Download proto file if it doesn't exist.
-    let proto_path = PathBuf::from("proto/plugin.proto");
-
     if !proto_path.exists() {
         eprintln!("Downloading plugin.proto version {}...", proto_version);
         std::fs::create_dir_all("proto")?;
@@ -33,6 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     std::fs::create_dir_all(&out_dir)?;
 
     // Configure protobuf compilation.
+    eprintln!("Generating Rust code from protobuf...");
     tonic_build::configure()
         .build_server(true)
         .build_client(false)

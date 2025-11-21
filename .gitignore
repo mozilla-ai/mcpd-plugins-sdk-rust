@@ -2,12 +2,6 @@
 /target/
 Cargo.lock
 
-# Generated code.
-/src/generated/
-
-# Downloaded proto files.
-/proto/
-
 # IDE files.
 .vscode/
 .idea/
