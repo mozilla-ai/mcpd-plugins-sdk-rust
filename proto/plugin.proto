@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package mozilla.mcpd.plugins.v1;
+
+// Go Option: This option tells the Go compiler where to find the generated code.
+// This is what plugin developers writing in Go will reference.
+option go_package = "github.com/mozilla-ai/mcpd-plugins-sdk-go/pkg/plugins/v1;v1";
+
+// C# Option: Defines the namespace for the generated classes.
+// This is the namespace developers using the C# plugin SDK will reference.
+option csharp_namespace = "MozillaAI.Mcpd.Plugins.V1"; 
+
+import "google/protobuf/empty.proto";
+
+// Metadata about the plugin.
+message Metadata {
+  string name = 1;
+  string version = 2;
+  string description = 3;
+  string commit_hash = 4;
+  string build_date = 5;
+}
+
+// Flow supported by the plugin.
+enum Flow {
+  FLOW_REQUEST = 0;
+  FLOW_RESPONSE = 1;
+}
+
+// Capabilities declares which flows a plugin supports.
+// The repeated field represents a set (no duplicates expected).
+message Capabilities {
+  repeated Flow flows = 1;
+}
+
+// HTTPRequest represents an HTTP request for plugin processing.
+message HTTPRequest {
+  string method = 1;
+  string url = 2;
+  string path = 3;
+  map<string, string> headers = 4;  // Simplified: first value only per header
+  bytes body = 5;
+  string remote_addr = 6;
+  string request_uri = 7;
+}
+
+// HTTPResponse represents an HTTP response from plugin processing.
+message HTTPResponse {
+  int32 status_code = 1;
+  map<string, string> headers = 2;
+  bytes body = 3;
+  bool continue = 4;  // If true, continue to next plugin/handler; if false, short-circuit
+
+  // Optional modified request for plugins that want to transform the incoming request.
+  // When set, contains the modified version of the request that was processed.
+  HTTPRequest modified_request = 5;
+}
+
+// TelemetryConfig provides OpenTelemetry configuration.
+message TelemetryConfig {
+  string otlp_endpoint = 1;
+  string service_name = 2;
+  string environment = 3;
+  double sample_ratio = 4;
+}
+
+// PluginConfig contains host-provided configuration for the plugin.
+message PluginConfig {
+  TelemetryConfig telemetry = 1;
+  map<string, string> custom_config = 2;  // Plugin-specific config from YAML
+}
+
+// Plugin service.
+service Plugin {
+  // Lifecycle
+  rpc Configure(PluginConfig) returns (google.protobuf.Empty);
+  rpc Stop(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // Identity and capabilities
+  rpc GetMetadata(google.protobuf.Empty) returns (Metadata);
+  rpc GetCapabilities(google.protobuf.Empty) returns (Capabilities);
+
+  // Health / readiness
+  // Returns error via gRPC status if unhealthy or not ready.
+  rpc CheckHealth(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc CheckReady(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // Request / response handling
+  rpc HandleRequest(HTTPRequest) returns (HTTPResponse);
+  rpc HandleResponse(HTTPResponse) returns (HTTPResponse);
+}
