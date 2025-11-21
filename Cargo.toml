@@ -1,6 +1,6 @@
 [package]
 name = "mcpd-plugins-sdk"
-version = "0.0.2"
+version = "0.0.1"
 edition = "2021"
 rust-version = "1.83"
 authors = ["Mozilla AI"]
