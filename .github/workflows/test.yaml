@@ -17,12 +17,21 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        rust: [stable, 1.83.0]
+        rust: [stable, msrv]
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Determine Rust version
+        id: rust-version
+        run: |
+          if [ "${{ matrix.rust }}" = "msrv" ]; then
+            MSRV=$(grep '^rust-version' Cargo.toml | sed 's/.*"\(.*\)"/\1/')
+            echo "toolchain=${MSRV}" >> "$GITHUB_OUTPUT"
+          else
+            echo "toolchain=${{ matrix.rust }}" >> "$GITHUB_OUTPUT"
+          fi
       - uses: dtolnay/rust-toolchain@stable # Action's stable branch. No SHA pinning - repo doesn't publish releases.
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: ${{ steps.rust-version.outputs.toolchain }}
       - name: Install protoc (Ubuntu)
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
