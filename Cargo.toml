@@ -2,7 +2,7 @@
 name = "mcpd-plugins-sdk"
 version = "0.0.1"
 edition = "2021"
-rust-version = "1.83"
+rust-version = "1.85"
 authors = ["Mozilla AI"]
 license = "Apache-2.0"
 description = "Rust SDK for building mcpd plugins"
